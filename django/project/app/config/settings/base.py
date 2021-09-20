@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Project apps
+    'project.app.blockchain_eth',
+    'project.app.etherscan_app',
 ]
 
 MIDDLEWARE = [
