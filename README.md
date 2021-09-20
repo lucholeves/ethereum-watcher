@@ -1,4 +1,4 @@
-# My python project template
+# Ethereum watcher
 
 ## Dependency Management:
 

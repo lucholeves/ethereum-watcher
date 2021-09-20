@@ -1,11 +1,13 @@
 [tool.poetry]
-name = "python-template"
+name = "ethereum-watcher"
 version = "0.1.0"
-description = "My python project template"
+description = "A ethereum viewer"
 authors = ["Lucho Leves <lucianoleves@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.6.1"
+python = "^3.8.3"
+etherscan-python = "^2.1.0"
+Django = "^3.2.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.3"
