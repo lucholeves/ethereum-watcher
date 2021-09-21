@@ -8,6 +8,9 @@ authors = ["Lucho Leves <lucianoleves@gmail.com>"]
 python = "^3.8.3"
 etherscan-python = "^2.1.0"
 Django = "^3.2.7"
+djangorestframework = "^3.12.4"
+Markdown = "^3.3.4"
+django-filter = "^2.4.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.3"
