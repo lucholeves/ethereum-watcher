@@ -20,7 +20,7 @@
         <th>Miner</th>
         <th>Block Reward</th>
       </tr>
-      <tr v-for="(item, index) in info.data" :key="index">
+      <tr v-for="(item, index) in data.results" :key="index">
         <th>[{ item.blockNumber }]</th>
         <th>[{ item.timeStampDateTime }]</th>
         <th>[{ item.blockMiner }]</th>
@@ -40,7 +40,7 @@
 
     data() {
       return {
-        info: null
+        data: []
       }
     },
     mounted() {
@@ -53,8 +53,8 @@
       upDate: function () {
         console.log("running query...")
         axios
-          .get('http://localhost:8000/api/blocks')
-          .then(response => (this.info = response))
+          .get('http://localhost:8000/api/blocks/?limit=30')
+          .then(response => (this.data = response.data))
       },
       cancelAutoUpdate: function () { clearInterval(this.timer) },
       beforeDestroy() {

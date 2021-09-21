@@ -5,7 +5,7 @@ from .serializers import BlockModelSerializer, TransactionModelSerializer
 
 
 class BlockViewset(viewsets.ModelViewSet):
-    queryset = Block.objects.all()
+    queryset = Block.objects.all().order_by("-id")
     serializer_class = BlockModelSerializer
 
 
