@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework import serializers
 
 from .models import Block, Transaction
@@ -6,6 +8,7 @@ from .models import Block, Transaction
 class BlockModelSerializer(serializers.ModelSerializer):
     blockNumber = serializers.ReadOnlyField()
     timeStamp = serializers.ReadOnlyField()
+    timeStampDateTime = serializers.SerializerMethodField()
     blockMiner = serializers.ReadOnlyField()
     blockReward = serializers.ReadOnlyField()
     uncles = serializers.ReadOnlyField()
@@ -18,6 +21,10 @@ class BlockModelSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = instance.data
         return super().to_representation(representation)
+
+    def get_timeStampDateTime(self, obj):
+        date_time = datetime.utcfromtimestamp(int(obj["timeStamp"]))
+        return date_time
 
 
 class TransactionModelSerializer(serializers.ModelSerializer):

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ethereum watcher</title>
+</head>
+
+<body>
+  <h1>Ethereum watcher</h1>
+
+  <h2>Latest Blocks</h2>
+  <div id="blocks">
+    <table>
+      <tr>
+        <th>Block Number</th>
+        <th>Time stamp</th>
+        <th>Miner</th>
+        <th>Block Reward</th>
+      </tr>
+      <tr v-for="(item, index) in info.data" :key="index">
+        <th>[{ item.blockNumber }]</th>
+        <th>[{ item.timeStampDateTime }]</th>
+        <th>[{ item.blockMiner }]</th>
+        <th>[{ item.blockReward }]</th>
+      </tr>
+    </table>
+  </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+<script>
+  const vm = new Vue({
+    el: '#blocks',
+    delimiters: ['[{', '}]'],
+
+    data() {
+      return {
+        info: null
+      }
+    },
+    mounted() {
+      this.upDate();
+      this.timer = setInterval(this.upDate, 2000)
+      this.url = 'http://localhost:8000/api/blocks'
+    },
+
+    methods: {
+      upDate: function () {
+        console.log("running query...")
+        axios
+          .get('http://localhost:8000/api/blocks')
+          .then(response => (this.info = response))
+      },
+      cancelAutoUpdate: function () { clearInterval(this.timer) },
+      beforeDestroy() {
+        clearInterval(this.timer)
+      }
+
+    }
+  });
+
+
+
+
+
+
+
+
+
+  // new Vue({
+  //   el: '#main',
+  //   delimiters: ['[{', '}]'],
+
+
+  //   data() {
+  //     return {
+  //       info: null
+  //     }
+  //   },
+  //   methods: {
+  //     pollData() {
+  //       axios
+  //         .get('http://localhost:8000/api/blocks')
+  //         .then(response => (this.info = response))
+  //     }
+  //   },
+  //   beforeDestroy() {
+  //     clearInterval(this.polling)
+  //   },
+  //   created() {
+  //     this.pollData()
+  //   },
+  //   mounted() {
+  //     axios
+  //       .get('http://localhost:8000/api/blocks')
+  //       .then(response => (this.info = response))
+  //   }
+  // })
+</script>
+
+</html>

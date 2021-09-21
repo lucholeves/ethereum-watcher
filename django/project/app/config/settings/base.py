@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # Project apps
     "project.app.blockchain_eth",
     "project.app.etherscan_app",
+    "project.app.web_client",
 ]
 
 MIDDLEWARE = [
