@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: docker/django/Dockerfile
+    command: ./manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    working_dir: /code/django
+    stdin_open: true
+    tty: true
+    links:
+      - rabbitmq
+    environment:
+      PYTHONPATH: /code/django/project
+      DJANGO_SETTINGS_MODULE: app.config.settings.local
+      SHELL: "/bin/bash"
+  
+  # this service run celery and celery beat
+  circus:
+    <<: *django
+    container_name: eth_watcher_circus
+    ports: []
+    command: circusd circus.ini
+    links: 
+      - rabbitmq
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: "eth_watcher_rabbitmq"
+    environment:   
+    - RABBITMQ_DEFAULT_USER=admin
+    - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+        - 5672:5672
+        - 15672:15672
