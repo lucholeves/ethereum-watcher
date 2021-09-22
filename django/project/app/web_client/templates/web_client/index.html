@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'web_client/base.html' %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ethereum watcher</title>
-</head>
 
-<body>
+{% block content %}
   <h1>Ethereum watcher</h1>
 
   <h2>Latest Blocks</h2>
@@ -28,11 +21,9 @@
       </tr>
     </table>
   </div>
+{% endblock content %}
 
-</body>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-
+{% block scripts %}
 <script>
   const vm = new Vue({
     el: '#blocks',
@@ -64,43 +55,5 @@
     }
   });
 
-
-
-
-
-
-
-
-
-  // new Vue({
-  //   el: '#main',
-  //   delimiters: ['[{', '}]'],
-
-
-  //   data() {
-  //     return {
-  //       info: null
-  //     }
-  //   },
-  //   methods: {
-  //     pollData() {
-  //       axios
-  //         .get('http://localhost:8000/api/blocks')
-  //         .then(response => (this.info = response))
-  //     }
-  //   },
-  //   beforeDestroy() {
-  //     clearInterval(this.polling)
-  //   },
-  //   created() {
-  //     this.pollData()
-  //   },
-  //   mounted() {
-  //     axios
-  //       .get('http://localhost:8000/api/blocks')
-  //       .then(response => (this.info = response))
-  //   }
-  // })
 </script>
-
-</html>
+{% endblock scripts %}
