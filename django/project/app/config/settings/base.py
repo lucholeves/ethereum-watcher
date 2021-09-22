@@ -13,8 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -39,10 +38,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third party apps
     "rest_framework",
+    "django_celery_beat",
     # Project apps
-    "project.app.blockchain_eth",
-    "project.app.etherscan_app",
-    "project.app.web_client",
+    "app.blockchain_eth",
+    "app.etherscan_app",
+    "app.web_client",
 ]
 
 MIDDLEWARE = [
@@ -55,7 +55,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "project.app.config.urls"
+ROOT_URLCONF = "app.config.urls"
 
 TEMPLATES = [
     {
@@ -73,7 +73,7 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = "project.app.config.wsgi.application"
+WSGI_APPLICATION = "app.config.wsgi.application"
 
 
 # Database
@@ -133,3 +133,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 100,
 }
+
+
+# Celery configs
+
+CELERY_BROKER_URL = "amqp://admin:admin@rabbitmq:5672//"
