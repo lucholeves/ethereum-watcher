@@ -1,9 +1,11 @@
 import logging
 
-from project.app.blockchain_eth.interfaces import EtherscanInterface
+from app.blockchain_eth.interfaces import EtherscanInterface
+
 from .models import Block
 
 logger = logging.getLogger(__name__)
+
 
 class BlockchainEthService:
     """ """
@@ -14,7 +16,16 @@ class BlockchainEthService:
         last_block_created_blockchain = EtherscanInterface.get_last_block_created()
 
         # TODO: This API endpoint returns a maximum of 10000 records only.
-        start_block = last_block_updated.number if last_block_updated else last_block_created_blockchain - 50
+        limit_blocks = 500
+        start_block = (
+            last_block_updated.number + 1
+            if last_block_updated
+            and (
+                last_block_created_blockchain - last_block_updated.number
+                <= limit_blocks
+            )
+            else last_block_created_blockchain - 50
+        )
 
         if start_block < last_block_created_blockchain:
             blocks_to_create = []
