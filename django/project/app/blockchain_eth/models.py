@@ -16,10 +16,6 @@ class Block(models.Model):
         self.number = int(self.data["blockNumber"])
         super().save(*args, **kwargs)
 
-    # @property
-    # def number(self) -> int:
-    #     return int(self.data["blockNumber"])
-
 
 class Transaction(models.Model):
     block = models.ForeignKey(

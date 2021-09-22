@@ -16,7 +16,7 @@ class BlockModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Block
-        fields = "__all__"
+        exclude = ["number"]
 
     def to_representation(self, instance):
         representation = instance.data
