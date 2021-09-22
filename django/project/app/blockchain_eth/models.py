@@ -8,11 +8,17 @@ class Account(models.Model):
 
 
 class Block(models.Model):
+    number = models.IntegerField(unique=True)
     data = models.JSONField(default=dict)
+    transactions_updated = models.BooleanField(default=False)
 
-    @property
-    def number(self) -> int:
-        return int(self.data["blockNumber"])
+    def save(self, *args, **kwargs):
+        self.number = int(self.data["blockNumber"])
+        super().save(*args, **kwargs)
+
+    # @property
+    # def number(self) -> int:
+    #     return int(self.data["blockNumber"])
 
 
 class Transaction(models.Model):
