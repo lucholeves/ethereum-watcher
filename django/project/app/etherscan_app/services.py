@@ -1,5 +1,6 @@
 import logging
 import time
+from typing import Iterable
 
 from etherscan import Etherscan
 
@@ -36,7 +37,9 @@ class EtherscanService:
                 logger.exception(e)
 
     @staticmethod
-    def get_internal_transactions_by_block_range(*, start_block=int, end_block=int):
+    def get_internal_transactions_by_block_range(
+        *, start_block=int, end_block=int
+    ) -> Iterable:
         eth = EtherscanService.create_ethercan_session()
 
         # TODO: validate range

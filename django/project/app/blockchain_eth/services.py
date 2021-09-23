@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from django.db import transaction
 from django.db.utils import IntegrityError
@@ -14,7 +15,7 @@ class BlockchainEthService:
     """ """
 
     @staticmethod
-    def update_blocks():
+    def update_blocks() -> List[int]:
         last_block_updated = Block.objects.last()
         last_block_created_blockchain = EtherscanInterface.get_last_block_created()
 
@@ -40,14 +41,20 @@ class BlockchainEthService:
                 )
             created = Block.objects.bulk_create(blocks_to_create)
             logger.info(f"{len(created)} new blocks created.")
+            return [block.id for block in created]
         else:
             logger.info(f"No news blocks created.")
 
+        return []
+
     @staticmethod
-    def update_transactions():
-        blocks_to_update = Block.objects.filter(transactions_updated=False).order_by(
-            "id"
-        )
+    def get_update_transactions_name() -> str:
+        return "app.blockchain_eth.tasks.update_transactions"
+
+    @staticmethod
+    def update_transactions(*, block_ids: List[int]):
+        blocks_to_update = Block.objects.filter(id__in=block_ids).order_by("id")
+
         if blocks_to_update:
             start_block = blocks_to_update.first().number
             end_block = blocks_to_update.last().number
@@ -68,17 +75,19 @@ class BlockchainEthService:
 
             try:
                 with transaction.atomic():
-                    created = Transaction.objects.bulk_create(new_transactions)
-                    logger.info(f"{len(created)} new transaction created.")
-
-                    blocks_transaction_updated = Transaction.objects.all().values_list(
-                        "block__id"
+                    transaction_created = Transaction.objects.bulk_create(
+                        new_transactions
                     )
+                    blocks_transaction_updated = [
+                        transaction.block_id for transaction in transaction_created
+                    ]
                     updated = Block.objects.filter(
                         id__in=blocks_transaction_updated
                     ).update(transactions_updated=True)
-                    logger.info(f"{updated} blocks updated.")
+                    logger.info(
+                        f"{len(transaction_created)} new transaction created. {updated} blocks updated."
+                    )
             except IntegrityError:
                 logger.exception(f"Database error!")
         else:
-            logger.info("All transactions are updated.")
+            logger.info("Transactions updated.")
