@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from app.etherscan_app.services import EtherscanService
 
 
@@ -13,7 +15,9 @@ class EtherscanAPI:
         )
 
     @staticmethod
-    def get_internal_transactions_by_block_range(*, start_block=int, end_block=int):
+    def get_internal_transactions_by_block_range(
+        *, start_block=int, end_block=int
+    ) -> Iterable:
         return EtherscanService.get_internal_transactions_by_block_range(
             start_block=start_block, end_block=end_block
         )
