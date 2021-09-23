@@ -15,10 +15,13 @@ services:
     tty: true
     links:
       - rabbitmq
+      - postgres
     environment:
       PYTHONPATH: /code/django/project
       DJANGO_SETTINGS_MODULE: app.config.settings.local
       SHELL: "/bin/bash"
+    depends_on:
+      - postgres
   
   # this service run celery and celery beat
   circus:
@@ -40,3 +43,13 @@ services:
     ports:
         - 5672:5672
         - 15672:15672
+
+  postgres:
+    # Official Postgres image from DockerHub (we use the last version)
+    image: 'postgres:latest'
+    ports:
+      - 5432:5432
+    environment: 
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres

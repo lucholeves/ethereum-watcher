@@ -14,6 +14,7 @@ django-filter = "^2.4.0"
 celery = "^5.1.2"
 circus = "^0.17.1"
 django-celery-beat = "^2.2.1"
+psycopg2-binary = "^2.9.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.3"
