@@ -21,13 +21,9 @@ beat_scheduler = "django_celery_beat.schedulers:DatabaseScheduler"
 beat_max_loop_interval = 5
 
 app.conf.beat_schedule = {
-    "update_products": {
+    "update_blocks": {
         "task": "app.blockchain_eth.tasks.update_blocks",
         "schedule": timedelta(seconds=30),
-    },
-    "update_transactions": {
-        "task": "app.blockchain_eth.tasks.update_transactions",
-        "schedule": timedelta(seconds=31),
-    },
+    }
 }
 app.conf.timezone = "UTC"
