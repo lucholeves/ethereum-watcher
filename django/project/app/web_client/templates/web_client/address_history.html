@@ -2,15 +2,18 @@
 
 
 {% block content %}
-  <h1>Block details for block {{ block_number }}</h1>
+  <h1>History transactions for adrress {{ address }}</h1>
 
-  <div id="block_detail">
+  <div id="history-detail">
     <h3>Internal Transactions</h3>
+    <p>Shows 100 transactions.</p>
+
     <table>
       <tr>
         <th>#</th>
         <th>Txn Hash</th>
         <th>from</th>
+        <th></th>
         <th>to</th>
         <th>gas</th>
         <th>type</th>
@@ -26,8 +29,10 @@
       <tr v-for="(item, index) in transactions_internal.results" :key="index">
         <th>[{ index + 1 }]</th>
         <th>[{ item.hash }] </th>
-        <th><a :href="'/address/' + item.from_id">[{ item.from_id }]</a></th>
-        <th><a :href="'/address/' + item.to_id">[{ item.to_id }]</a> </th>
+        <th>[{ item.from_id }] </th>
+        <th v-if="item.to_id === address">OUT</th>
+        <th v-else>IN</th>
+        <th>[{ item.to_id }] </th>
         <th>[{ item.gas }] </th>
         <th>[{ item.type }] </th>
         <th>[{ item.input }] </th>
@@ -42,11 +47,13 @@
     </table>    
 
     <h3>Normal Transactions</h3>
+    <p>Shows 100 transactions.</p>
     <table>
       <tr>
         <th>#</th>
         <th>Txn Hash</th>
         <th>from</th>
+        <th></th>
         <th>to</th>
         <th>gas</th>
         <th>type</th>
@@ -63,6 +70,8 @@
         <th>[{ index + 1 }]</th>
         <th>[{ item.hash }] </th>
         <th>[{ item.from_id }] </th>
+        <th v-if="item.to_id === address">OUT</th>
+        <th v-else>IN</th>
         <th>[{ item.to_id }] </th>
         <th>[{ item.gas }] </th>
         <th>[{ item.type }] </th>
@@ -83,20 +92,21 @@
 
 {% block scripts %}  
   <script>
-    const block_id = {{ block_number }}
+    const address = "{{ address }}"
     const vm = new Vue({
-      el: '#block_detail',
+      el: '#history-detail',
       delimiters: ['[{', '}]'],
 
       data() {
         return {
           transactions_internal: [],
-          transactions_normal: []
+          transactions_normal: [],
+          address: address
         }
       },
       mounted() {
-        this.url_internal = 'http://localhost:8000/api/transactions/internal/?limit=500&block__number=' + block_id;
-        this.url_normal = 'http://localhost:8000/api/transactions/normal/?limit=1000&block__number=' + block_id;
+        this.url_internal = 'http://localhost:8000/api/transactions/internal/address-history/' + address;
+        this.url_normal = 'http://localhost:8000/api/transactions/normal/address-history/' + address;
         this.upDate();
       },
       methods: {

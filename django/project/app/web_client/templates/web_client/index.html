@@ -14,7 +14,7 @@
         <th>Block Reward</th>
       </tr>
       <tr v-for="(item, index) in data.results" :key="index">
-        <th>[{ item.blockNumber }]</th>
+        <th><a :href="'/block/' + item.blockNumber">[{ item.blockNumber }]</a></th>
         <th>[{ item.timeStampDateTime }]</th>
         <th>[{ item.blockMiner }]</th>
         <th>[{ item.blockReward }]</th>
@@ -36,7 +36,7 @@
     },
     mounted() {
       this.upDate();
-      this.timer = setInterval(this.upDate, 2000)
+      this.timer = setInterval(this.upDate, 5000)
       this.url = 'http://localhost:8000/api/blocks'
     },
 
