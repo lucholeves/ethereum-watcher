@@ -2,124 +2,134 @@
 
 
 {% block content %}
-  <h1>History transactions for adrress {{ address }}</h1>
+<h1>History transactions for address: {{ address }}</h1>
 
-  <div id="history-detail">
-    <h3>Internal Transactions</h3>
-    <p>Shows 100 transactions.</p>
-
-    <table>
-      <tr>
-        <th>#</th>
-        <th>Txn Hash</th>
-        <th>from</th>
-        <th></th>
-        <th>to</th>
-        <th>gas</th>
-        <th>type</th>
-        <th>input</th>
-        <th>value</th>
-        <th>errCode</th>
-        <th>gasUsed</th>
-        <th>isError</th>
-        <th>traceId</th>
-        <th>timeStamp</th>
-        <th>contractAddress</th>
-      </tr>
-      <tr v-for="(item, index) in transactions_internal.results" :key="index">
-        <th>[{ index + 1 }]</th>
-        <th>[{ item.hash }] </th>
-        <th>[{ item.from_id }] </th>
-        <th v-if="item.to_id === address">OUT</th>
-        <th v-else>IN</th>
-        <th>[{ item.to_id }] </th>
-        <th>[{ item.gas }] </th>
-        <th>[{ item.type }] </th>
-        <th>[{ item.input }] </th>
-        <th>[{ item.value }] </th>
-        <th>[{ item.errCode }] </th>
-        <th>[{ item.gasUsed }] </th>
-        <th>[{ item.isError }] </th>
-        <th>[{ item.traceId }] </th>
-        <th>[{ item.timeStampDateTime }] </th>
-        <th>[{ item.contractAddress }] </th>
-      </tr>
-    </table>    
-
-    <h3>Normal Transactions</h3>
-    <p>Shows 100 transactions.</p>
-    <table>
-      <tr>
-        <th>#</th>
-        <th>Txn Hash</th>
-        <th>from</th>
-        <th></th>
-        <th>to</th>
-        <th>gas</th>
-        <th>type</th>
-        <th>input</th>
-        <th>value</th>
-        <th>errCode</th>
-        <th>gasUsed</th>
-        <th>isError</th>
-        <th>traceId</th>
-        <th>timeStamp</th>
-        <th>contractAddress</th>
-      </tr>
-      <tr v-for="(item, index) in transactions_normal.results" :key="index">
-        <th>[{ index + 1 }]</th>
-        <th>[{ item.hash }] </th>
-        <th>[{ item.from_id }] </th>
-        <th v-if="item.to_id === address">OUT</th>
-        <th v-else>IN</th>
-        <th>[{ item.to_id }] </th>
-        <th>[{ item.gas }] </th>
-        <th>[{ item.type }] </th>
-        <th>[{ item.input }] </th>
-        <th>[{ item.value }] </th>
-        <th>[{ item.errCode }] </th>
-        <th>[{ item.gasUsed }] </th>
-        <th>[{ item.isError }] </th>
-        <th>[{ item.traceId }] </th>
-        <th>[{ item.timeStampDateTime }] </th>
-        <th>[{ item.contractAddress }] </th>
-      </tr>
-    </table>    
+<div id="history-detail" class="row">
+  <h3>Internal Transactions</h3>
+  <p>Shows 100 transactions.</p>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Txn Hash</th>
+          <th>from</th>
+          <th></th>
+          <th>to</th>
+          <th>gas</th>
+          <th>type</th>
+          <th>input</th>
+          <th>value</th>
+          <th>errCode</th>
+          <th>gasUsed</th>
+          <th>isError</th>
+          <th>traceId</th>
+          <th>timeStamp</th>
+          <th>contractAddress</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in transactions_internal.results" :key="index">
+          <th>[{ index + 1 }]</th>
+          <th>[{ item.hash }] </th>
+          <th>[{ item.from_id }] </th>
+          <th v-if="item.to_id === address">OUT</th>
+          <th v-else>IN</th>
+          <th>[{ item.to_id }] </th>
+          <th>[{ item.gas }] </th>
+          <th>[{ item.type }] </th>
+          <th>[{ item.input }] </th>
+          <th>[{ item.value }] </th>
+          <th>[{ item.errCode }] </th>
+          <th>[{ item.gasUsed }] </th>
+          <th>[{ item.isError }] </th>
+          <th>[{ item.traceId }] </th>
+          <th>[{ item.timeStampDateTime }] </th>
+          <th>[{ item.contractAddress }] </th>
+        </tr>
+      </tbody>
+    </table>
   </div>
+  <h3>Normal Transactions</h3>
+  <p>Shows 100 transactions max</p>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Txn Hash</th>
+          <th>from</th>
+          <th></th>
+          <th>to</th>
+          <th>gas</th>
+          <th>type</th>
+          <th>input</th>
+          <th>value</th>
+          <th>errCode</th>
+          <th>gasUsed</th>
+          <th>isError</th>
+          <th>traceId</th>
+          <th>timeStamp</th>
+          <th>contractAddress</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in transactions_normal.results" :key="index">
+          <th>[{ index + 1 }]</th>
+          <th>[{ item.hash }] </th>
+          <th>[{ item.from_id }] </th>
+          <th v-if="item.to_id === address">OUT</th>
+          <th v-else>IN</th>
+          <th>[{ item.to_id }] </th>
+          <th>[{ item.gas }] </th>
+          <th>[{ item.type }] </th>
+          <th>[{ item.input }] </th>
+          <th>[{ item.value }] </th>
+          <th>[{ item.errCode }] </th>
+          <th>[{ item.gasUsed }] </th>
+          <th>[{ item.isError }] </th>
+          <th>[{ item.traceId }] </th>
+          <th>[{ item.timeStampDateTime }] </th>
+          <th>[{ item.contractAddress }] </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 {% endblock content %}
 
 
-{% block scripts %}  
-  <script>
-    const address = "{{ address }}"
-    const vm = new Vue({
-      el: '#history-detail',
-      delimiters: ['[{', '}]'],
+{% block scripts %}
+<script>
+  const address = "{{ address }}"
+  const vm = new Vue({
+    el: '#history-detail',
+    delimiters: ['[{', '}]'],
 
-      data() {
-        return {
-          transactions_internal: [],
-          transactions_normal: [],
-          address: address
-        }
-      },
-      mounted() {
-        this.url_internal = 'http://localhost:8000/api/transactions/internal/address-history/' + address;
-        this.url_normal = 'http://localhost:8000/api/transactions/normal/address-history/' + address;
-        this.upDate();
-      },
-      methods: {
-        upDate: function () {
-          console.log("running query...")
-          axios
-            .get(this.url_internal)
-            .then(response => (this.transactions_internal = response.data))
-          axios
-            .get(this.url_normal)
-            .then(response => (this.transactions_normal = response.data))          
-        }
-      }});
-  </script>
+    data() {
+      return {
+        transactions_internal: [],
+        transactions_normal: [],
+        address: address
+      }
+    },
+    mounted() {
+      this.url_internal = 'http://localhost:8000/api/transactions/internal/address-history/' + address;
+      this.url_normal = 'http://localhost:8000/api/transactions/normal/address-history/' + address;
+      this.upDate();
+    },
+    methods: {
+      upDate: function () {
+        console.log("running query...")
+        axios
+          .get(this.url_internal)
+          .then(response => (this.transactions_internal = response.data))
+        axios
+          .get(this.url_normal)
+          .then(response => (this.transactions_normal = response.data))
+      }
+    }
+  });
+</script>
 {% endblock scripts %}
-  

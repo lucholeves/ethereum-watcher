@@ -4,22 +4,28 @@
 {% block content %}
   <h1>Ethereum watcher</h1>
 
-  <h2>Latest Blocks</h2>
+  <h2>Latest 30 Blocks</h2>
   <div id="blocks">
-    <table>
-      <tr>
-        <th>Block Number</th>
-        <th>Time stamp</th>
-        <th>Miner</th>
-        <th>Block Reward</th>
-      </tr>
-      <tr v-for="(item, index) in data.results" :key="index">
-        <th><a :href="'/block/' + item.blockNumber">[{ item.blockNumber }]</a></th>
-        <th>[{ item.timeStampDateTime }]</th>
-        <th>[{ item.blockMiner }]</th>
-        <th>[{ item.blockReward }]</th>
-      </tr>
-    </table>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Block Number</th>
+            <th>Time stamp</th>
+            <th>Miner</th>
+            <th>Block Reward</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in data.results" :key="index">
+            <th><a :href="'/block/' + item.blockNumber">[{ item.blockNumber }]</a></th>
+            <th>[{ item.timeStampDateTime }]</th>
+            <th>[{ item.blockMiner }]</th>
+            <th>[{ item.blockReward }]</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 {% endblock content %}
 
