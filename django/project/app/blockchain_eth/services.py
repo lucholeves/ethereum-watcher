@@ -48,11 +48,15 @@ class BlockchainEthService:
         return []
 
     @staticmethod
-    def get_update_transactions_name() -> str:
-        return "app.blockchain_eth.tasks.update_transactions"
+    def get_update_internal_transactions_name() -> str:
+        return "app.blockchain_eth.tasks.update_internal_transactions"
 
     @staticmethod
-    def update_transactions(*, block_ids: List[int]):
+    def get_update_normal_transactions_name() -> str:
+        return "app.blockchain_eth.tasks.update_normal_transactions"
+
+    @staticmethod
+    def update_internal_transactions(*, block_ids: List[int]):
         blocks_to_update = Block.objects.filter(id__in=block_ids).order_by("id")
 
         if blocks_to_update:
@@ -65,29 +69,70 @@ class BlockchainEthService:
             new_transactions = []
             for txn_data in transactions_to_create:
                 block_number = txn_data.get("blockNumber")
+                block = Block.objects.get(data__blockNumber=block_number)
+
+                new_transactions.append(
+                    Transaction(block=block, type=Transaction.INTERNAL, data=txn_data)
+                )
+            if new_transactions:
                 try:
+                    with transaction.atomic():
+                        transaction_created = Transaction.objects.bulk_create(
+                            new_transactions
+                        )
+                        blocks_transaction_updated = [
+                            transaction.block_id for transaction in transaction_created
+                        ]
+                        updated = Block.objects.filter(
+                            id__in=blocks_transaction_updated
+                        ).update(transactions_updated=True)
+                        logger.info(
+                            f"{len(transaction_created)} new INTERNAL transaction created. {updated} blocks updated."
+                        )
+                except IntegrityError:
+                    logger.exception(f"Database error!")
+            else:
+                logger.info("No created news NORMAL transactions.")
+        else:
+            logger.info("Transactions updated.")
+
+    @staticmethod
+    def update_normal_transactions(*, block_ids: List[int]):
+        blocks_to_update = Block.objects.filter(id__in=block_ids).order_by("id")
+
+        if blocks_to_update:
+            new_transactions = []
+            for block in blocks_to_update:
+                #  Specify a smaller startblock and endblock range for faster search results.
+                transactions_to_create = EtherscanInterface.get_normal_transactions_by_block_number(
+                    block_number=block.number
+                )
+                for txn_data in transactions_to_create:
+                    # TODO: some data came in HEX numbers
+                    block_number = str(int(txn_data.get("blockNumber"), 0))
                     block = Block.objects.get(data__blockNumber=block_number)
-                except Exception:
-                    import pdb
 
-                    pdb.set_trace()
-                new_transactions.append(Transaction(block=block, data=txn_data))
-
-            try:
-                with transaction.atomic():
-                    transaction_created = Transaction.objects.bulk_create(
-                        new_transactions
+                    new_transactions.append(
+                        Transaction(block=block, type=Transaction.NORMAL, data=txn_data)
                     )
-                    blocks_transaction_updated = [
-                        transaction.block_id for transaction in transaction_created
-                    ]
-                    updated = Block.objects.filter(
-                        id__in=blocks_transaction_updated
-                    ).update(transactions_updated=True)
-                    logger.info(
-                        f"{len(transaction_created)} new transaction created. {updated} blocks updated."
-                    )
-            except IntegrityError:
-                logger.exception(f"Database error!")
+            if new_transactions:
+                try:
+                    with transaction.atomic():
+                        transaction_created = Transaction.objects.bulk_create(
+                            new_transactions
+                        )
+                        blocks_transaction_updated = [
+                            transaction.block_id for transaction in transaction_created
+                        ]
+                        updated = Block.objects.filter(
+                            id__in=blocks_transaction_updated
+                        ).update(transactions_updated=True)
+                        logger.info(
+                            f"{len(transaction_created)} new NORMAL transaction created. {updated} blocks updated."
+                        )
+                except IntegrityError:
+                    logger.exception(f"Database error!")
+            else:
+                logger.info("No created news NORMAL transactions.")
         else:
             logger.info("Transactions updated.")
