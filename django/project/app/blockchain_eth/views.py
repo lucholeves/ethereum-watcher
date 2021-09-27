@@ -1,14 +1,47 @@
-from rest_framework import viewsets
+from rest_framework import generics
 
+from .generics import TransactionGenericListAPIView, TransactionHistoryByAddressGeneric
 from .models import Block, Transaction
-from .serializers import BlockModelSerializer, TransactionModelSerializer
+from .serializers import (
+    BlockModelSerializer,
+    TransactionInternalModelSerializer,
+    TransactionNormalModelSerializer,
+)
+
+# ---------------------------------------------------------------------
+# Class based views
+# ---------------------------------------------------------------------
 
 
-class BlockViewset(viewsets.ModelViewSet):
+class BlockListAPIView(generics.ListAPIView):
     queryset = Block.objects.all().order_by("-id")
     serializer_class = BlockModelSerializer
+    filterset_fields = ["number", "transactions_updated"]
 
 
-class TransactionViewset(viewsets.ModelViewSet):
-    queryset = Transaction.objects.all()
-    serializer_class = TransactionModelSerializer
+class TransactionInternalListAPIView(TransactionGenericListAPIView):
+    """ """
+
+    queryset = Transaction.objects.internals()
+    serializer_class = TransactionInternalModelSerializer
+
+
+class TransactionNormalListAPIView(TransactionGenericListAPIView):
+    """ """
+
+    queryset = Transaction.objects.normals()
+    serializer_class = TransactionNormalModelSerializer
+
+
+class TransactionNormalHistoryByAddress(TransactionHistoryByAddressGeneric):
+    """ """
+
+    queryset = Transaction.objects.normals()
+    serializer_class = TransactionNormalModelSerializer
+
+
+class TransactionInternalHistoryByAddress(TransactionHistoryByAddressGeneric):
+    """ """
+
+    queryset = Transaction.objects.internals()
+    serializer_class = TransactionInternalModelSerializer
