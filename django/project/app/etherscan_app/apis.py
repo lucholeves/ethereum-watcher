@@ -21,3 +21,9 @@ class EtherscanAPI:
         return EtherscanService.get_internal_transactions_by_block_range(
             start_block=start_block, end_block=end_block
         )
+
+    @staticmethod
+    def get_normal_transactions_by_block_number(*, block_number: int):
+        return EtherscanService.get_normal_transactions_by_block_number(
+            block_number=block_number
+        )
