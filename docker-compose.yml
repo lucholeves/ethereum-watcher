@@ -20,6 +20,9 @@ services:
       PYTHONPATH: /code/django/project
       DJANGO_SETTINGS_MODULE: app.config.settings.local
       SHELL: "/bin/bash"
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: admin
+      DJANGO_SUPERUSER_EMAIL: admin@admin.com
     depends_on:
       - postgres
   
