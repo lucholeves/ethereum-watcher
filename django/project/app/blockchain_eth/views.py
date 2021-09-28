@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import viewsets
 
 from .generics import TransactionGenericViewset
 from .models import Block, Transaction
@@ -13,9 +13,10 @@ from .serializers import (
 # ---------------------------------------------------------------------
 
 
-class BlockListAPIView(generics.ListAPIView):
+class BlockViewset(viewsets.ReadOnlyModelViewSet):
     queryset = Block.objects.all().order_by("-id")
     serializer_class = BlockModelSerializer
+    lookup_field = "number"
     filterset_fields = ["number", "transactions_updated"]
 
 

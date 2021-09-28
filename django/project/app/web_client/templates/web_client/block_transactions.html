@@ -6,7 +6,14 @@
 
 <div id="block_detail">
   <h3>Details</h3>
-  [{ block }]
+  <table class="table table-striped">
+    <tr v-for="(value, name) in block" :key="name">
+      <th> <strong> [{ name}]:</strong></th>
+      <th>
+        [{ value }]
+      </th>
+    </tr>
+  </table>  
   <h3>Normal Transactions</h3>
   <div class="table-responsive">
     <table class="table table-striped">
