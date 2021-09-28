@@ -14,6 +14,12 @@ def block_details(request, block_number):
     return HttpResponse(template.render(context, request))
 
 
+def transaction_details(request, tx_hash):
+    template = loader.get_template("web_client/transaction_detail.html")
+    context = {"tx_hash": tx_hash}
+    return HttpResponse(template.render(context, request))
+
+
 def address_history(request, address):
     template = loader.get_template("web_client/address_history.html")
     context = {"address": address}

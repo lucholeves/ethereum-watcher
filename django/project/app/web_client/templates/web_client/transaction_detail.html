@@ -1,0 +1,47 @@
+{% extends 'web_client/base.html' %}
+
+
+{% block content %}
+<h1>Detail for transaction: {{ tx_hash }}</h1>
+
+<div id="tx_detail">
+  <table class="table">
+    <tr v-for="(value, name) in transaction" :key="name">
+      <th> <strong> [{ name}]:</strong></th>
+      <th>
+        [{ value }]
+      </th>
+
+    </tr>
+  </table>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  const tx_hash = "{{ tx_hash }}"
+  const vm = new Vue({
+    el: '#tx_detail',
+    delimiters: ['[{', '}]'],
+
+    data() {
+      return {
+        transaction: null,
+      }
+    },
+    mounted() {
+      this.url_transaction_detail = 'http://localhost:8000/api/transactions/normal/' + tx_hash;
+      this.upDate();
+    },
+    methods: {
+      upDate: function () {
+        axios
+          .get(this.url_transaction_detail)
+          .then(response => (this.transaction = response.data))
+
+      }
+    }
+  });
+</script>
+{% endblock scripts %}

@@ -5,6 +5,8 @@
 <h1>Block details for block {{ block_number }}</h1>
 
 <div id="block_detail">
+  <h3>Details</h3>
+  [{ block }]
   <h3>Normal Transactions</h3>
   <div class="table-responsive">
     <table class="table table-striped">
@@ -16,31 +18,23 @@
           <th>to</th>
           <th>gas</th>
           <th>type</th>
-          <th>input</th>
-          <th>value</th>
-          <th>errCode</th>
           <th>gasUsed</th>
           <th>isError</th>
           <th>traceId</th>
-          <th>timeStamp</th>
           <th>contractAddress</th>
         </tr>
       </thead>
-      <tbody>        
+      <tbody>
         <tr v-for="(item, index) in transactions_normal.results" :key="index">
           <th>[{ index + 1 }]</th>
-          <th>[{ item.hash }] </th>
+          <th><a :href="'/transaction/' + item.hash"> [{ item.hash }] </a></th>
           <th><a :href="'/address/' + item.from_id">[{ item.from_id }]</a></th>
           <th><a :href="'/address/' + item.to_id">[{ item.to_id }]</a> </th>
           <th>[{ item.gas }] </th>
           <th>[{ item.type }] </th>
-          <th>[{ item.input }] </th>
-          <th>[{ item.value }] </th>
-          <th>[{ item.errCode }] </th>
           <th>[{ item.gasUsed }] </th>
           <th>[{ item.isError }] </th>
           <th>[{ item.traceId }] </th>
-          <th>[{ item.timeStampDateTime }] </th>
           <th>[{ item.contractAddress }] </th>
         </tr>
       </tbody>
@@ -60,19 +54,23 @@
 
     data() {
       return {
-        transactions_internal: [],
+        block: null,
         transactions_normal: []
       }
     },
     mounted() {
-      this.url_normal = 'http://localhost:8000/api/transactions/normal/?limit=1000&block__number=' + block_id;
+      this.url_transaction_normal = 'http://localhost:8000/api/transactions/normal/?limit=1000&block__number=' + block_id;
+      this.url_block_detail = 'http://localhost:8000/api/blocks/' + block_id;
       this.upDate();
     },
     methods: {
       upDate: function () {
         axios
-          .get(this.url_normal)
+          .get(this.url_transaction_normal)
           .then(response => (this.transactions_normal = response.data))
+        axios
+          .get(this.url_block_detail)
+          .then(response => (this.block = response.data))
       }
     }
   });
