@@ -17,3 +17,7 @@ echo "Done!"
 echo "Creating admin user..."
 docker-compose run django ./manage.py createsuperuser --noinput
 echo "Done!"
+
+echo "Running services..."
+docker-compose stop
+echo "Done!"
