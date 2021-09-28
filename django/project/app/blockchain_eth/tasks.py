@@ -38,11 +38,12 @@ def update_blocks(self):
     logger.info("Running update blocks.")
     block_ids = BlockchainEthService.update_blocks()
 
-    # after create the new block would update the transactions
-    app.send_task(
-        BlockchainEthService.get_update_internal_transactions_name(),
-        kwargs={"block_ids": block_ids},
-    )
+    # NOTE: internal transactions aren't transactions per se.
+    # We need to change the approach :(
+    # app.send_task(
+    #     BlockchainEthService.get_update_internal_transactions_name(),
+    #     kwargs={"block_ids": block_ids},
+    # )
 
     # after create the new block would update the transactions
     app.send_task(

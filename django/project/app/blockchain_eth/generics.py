@@ -1,18 +1,22 @@
-from rest_framework import generics
+from rest_framework import viewsets
+from rest_framework.decorators import action
 
 
-class TransactionGenericListAPIView(generics.ListAPIView):
+class TransactionGenericViewset(viewsets.ReadOnlyModelViewSet):
+    lookup_field = "hash"
     filterset_fields = ["block__number"]
 
-
-class TransactionHistoryByAddressGeneric(generics.ListAPIView):
-    lookup_url_kwarg = "address"
-    filterset_fields = ["block__number"]
-
-    def get_queryset(self):
+    @action(
+        methods=["get"],
+        detail=False,
+        url_path="address-history/(?P<address>[^/.]+)",
+        url_name="address_history",
+    )
+    def address_history(self, request, address):
         queryset = super().get_queryset()
-        address = self.kwargs.get(self.lookup_url_kwarg)
         queryset = queryset.filter(data__to=address) | self.queryset.filter(
             data__from=address
         )
-        return queryset
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)

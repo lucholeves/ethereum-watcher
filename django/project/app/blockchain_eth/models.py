@@ -1,5 +1,7 @@
 from django.db import models
 
+from .managers import TransactionManager
+
 ON_DELETE_CASCADE = models.CASCADE
 
 
@@ -28,18 +30,9 @@ class Block(models.Model):
         return hex(self.number)
 
 
-class TransactionManager(models.Manager):
-    def internals(self):
-        return self.filter(type=Transaction.INTERNAL)
-
-    def normals(self):
-        return self.filter(type=Transaction.NORMAL)
-
-    def by_address(self, address: str):
-        return self.filter(data__from=address)
-
-
 class Transaction(models.Model):
+    # NOTE: internal transactions aren't transactions per se
+    # We need to change the approach
     UNKNOWN = "unknown"
     NORMAL = "normal"
     INTERNAL = "internal"

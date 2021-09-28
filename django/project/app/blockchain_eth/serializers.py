@@ -28,6 +28,7 @@ class BlockModelSerializer(serializers.ModelSerializer):
 
 
 class TransactionInternalModelSerializer(serializers.ModelSerializer):
+    # NOTE: internal transactions aren't transactions per se
     to_id = serializers.ReadOnlyField(source="to")
     from_id = serializers.ReadOnlyField(source="from")
     gas = serializers.ReadOnlyField()

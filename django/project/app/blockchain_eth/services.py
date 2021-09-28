@@ -57,6 +57,10 @@ class BlockchainEthService:
 
     @staticmethod
     def update_internal_transactions(*, block_ids: List[int]):
+        """
+        Note:internal transactions are not transactions per se.
+        We need to change the approach.
+        """
         blocks_to_update = Block.objects.filter(id__in=block_ids).order_by("id")
 
         if blocks_to_update:
@@ -72,7 +76,12 @@ class BlockchainEthService:
                 block = Block.objects.get(data__blockNumber=block_number)
 
                 new_transactions.append(
-                    Transaction(block=block, type=Transaction.INTERNAL, data=txn_data)
+                    Transaction(
+                        block=block,
+                        hash=txn_data["hash"],
+                        type=Transaction.INTERNAL,
+                        data=txn_data,
+                    )
                 )
             if new_transactions:
                 try:
@@ -109,15 +118,18 @@ class BlockchainEthService:
                 )
                 for txn_data in transactions_to_create:
                     # TODO: some data came in HEX numbers
-                    block_number = str(int(txn_data.get("blockNumber"), 0))
-                    block = Block.objects.get(data__blockNumber=block_number)
-
                     new_transactions.append(
-                        Transaction(block=block, type=Transaction.NORMAL, data=txn_data)
+                        Transaction(
+                            block=block,
+                            hash=txn_data["hash"],
+                            type=Transaction.NORMAL,
+                            data=txn_data,
+                        )
                     )
             if new_transactions:
                 try:
                     with transaction.atomic():
+
                         transaction_created = Transaction.objects.bulk_create(
                             new_transactions
                         )

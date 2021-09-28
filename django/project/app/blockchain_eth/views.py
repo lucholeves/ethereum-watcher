@@ -1,6 +1,6 @@
 from rest_framework import generics
 
-from .generics import TransactionGenericListAPIView, TransactionHistoryByAddressGeneric
+from .generics import TransactionGenericViewset
 from .models import Block, Transaction
 from .serializers import (
     BlockModelSerializer,
@@ -19,29 +19,18 @@ class BlockListAPIView(generics.ListAPIView):
     filterset_fields = ["number", "transactions_updated"]
 
 
-class TransactionInternalListAPIView(TransactionGenericListAPIView):
-    """ """
+class TransactionInternalViewset(TransactionGenericViewset):
+    """
+    NOTE: internal transactions aren't transactions per se
+    We need to change the approach
+    """
 
     queryset = Transaction.objects.internals()
     serializer_class = TransactionInternalModelSerializer
 
 
-class TransactionNormalListAPIView(TransactionGenericListAPIView):
+class TransactionNormalViewset(TransactionGenericViewset):
     """ """
 
     queryset = Transaction.objects.normals()
     serializer_class = TransactionNormalModelSerializer
-
-
-class TransactionNormalHistoryByAddress(TransactionHistoryByAddressGeneric):
-    """ """
-
-    queryset = Transaction.objects.normals()
-    serializer_class = TransactionNormalModelSerializer
-
-
-class TransactionInternalHistoryByAddress(TransactionHistoryByAddressGeneric):
-    """ """
-
-    queryset = Transaction.objects.internals()
-    serializer_class = TransactionInternalModelSerializer
