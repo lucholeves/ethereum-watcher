@@ -12,6 +12,9 @@ class Block(models.Model):
     data = models.JSONField(default=dict)
     transactions_updated = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f"Number: {self.number}"
+
     def save(self, *args, **kwargs):
         self.number = int(self.data["blockNumber"])
         super().save(*args, **kwargs)
@@ -46,6 +49,14 @@ class Transaction(models.Model):
     block = models.ForeignKey(
         Block, on_delete=ON_DELETE_CASCADE, related_name="transactions"
     )
+    hash = models.CharField(max_length=500, unique=True, default="")
     type = models.CharField(max_length=20, choices=TYPES, default=UNKNOWN)
     data = models.JSONField(default=dict)
     objects = TransactionManager()
+
+    def __str__(self):
+        return f"{self.hash} - {self.type}"
+
+    def save(self, *args, **kwargs):
+        self.hash = self.data["hash"]
+        super().save(*args, **kwargs)

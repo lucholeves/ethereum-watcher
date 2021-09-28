@@ -12,4 +12,4 @@ class BlockAdmin(admin.ModelAdmin):
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ["block", "type"]
+    list_display = ["block", "hash", "type"]
