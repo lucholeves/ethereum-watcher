@@ -8,4 +8,7 @@ CELERY_BROKER_URL=amqp://admin:admin@rabbitmq:5672//
 ALLOWED_HOSTS=localhost,
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY=secret
+SECRET_KEY=<your-secret-key>
+
+# https://docs.etherscan.io/getting-started/viewing-api-usage-statistics#creating-an-api-key
+ETHERSCAN_API_KEY=<your-etherscan-api-key-here>

@@ -3,6 +3,7 @@ import time
 from typing import Iterable, List
 
 from etherscan import Etherscan
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +16,7 @@ class EtherscanService:
 
     @staticmethod
     def create_ethercan_session():
-        eth = Etherscan("2H342TNQHSRRBSYVISHKJ9BTE2IA42PNHQ")
+        eth = Etherscan(settings.ETHERSCAN_API_KEY)
         return eth
 
     @staticmethod
