@@ -1,6 +1,7 @@
-from typing import Iterable
+from typing import Dict, Iterable, Optional
 
 from app.etherscan_app.services import EtherscanService
+from app.etherscan_app.factories import get_block_attributes, get_transaction_attributes
 
 
 class EtherscanAPI:
@@ -27,3 +28,11 @@ class EtherscanAPI:
         return EtherscanService.get_normal_transactions_by_block_number(
             block_number=block_number
         )
+
+    @staticmethod
+    def get_block_attributes():
+        return get_block_attributes()
+
+    @staticmethod
+    def get_transaction_attributes(block_number: Optional[int] = None) -> Dict:
+        return get_transaction_attributes()
