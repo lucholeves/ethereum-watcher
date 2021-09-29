@@ -5,7 +5,7 @@ faker = Faker()
 
 
 def get_block_attributes(block_number: Optional[int] = None) -> Dict:
-    """Returns the a block response from Etherscan"""
+    """Returns a block response from Etherscan"""
 
     attributes = {
         "uncles": faker.pylist(value_types=["pyint", "pybool"]),
@@ -19,7 +19,7 @@ def get_block_attributes(block_number: Optional[int] = None) -> Dict:
 
 
 def get_transaction_attributes() -> Dict:
-    """Returns the a transaction response from Etherscan"""
+    """Returns a transaction response from Etherscan"""
 
     return {
         "r": f"0x{faker.sha1()}",

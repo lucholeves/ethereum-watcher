@@ -16,6 +16,7 @@ circus = "^0.17.1"
 django-celery-beat = "^2.2.1"
 psycopg2-binary = "^2.9.1"
 pytest-mock = "^3.6.1"
+django-environ = "^0.7.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.3"
